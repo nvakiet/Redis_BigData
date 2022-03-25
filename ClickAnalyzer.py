@@ -13,9 +13,9 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.types import *
 from pyspark.sql.functions import *
-from py4j.java_gateway import JavaGateway
 import sys,logging
 from datetime import datetime
+from ClickWriter import ClickWriter
 
 # Logging configuration
 formatter = logging.Formatter('[%(asctime)s] %(levelname)s @ line %(lineno)d: %(message)s')
@@ -30,17 +30,17 @@ logger.addHandler(handler)
 dt_string = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 # set the app name
 APPNAME = "ClickAnalyzer"
+# redis instance address
+RHOST = "127.0.0.1"
+RPORT = "6379"
 
 def main():
-    # Start a java gateway to import spark-redis
-    gateway = JavaGateway()
-    
     # init spark session
     spark = SparkSession.builder\
         .appName(APPNAME + "_" + str(dt_string))\
         .master("local[*]")\
-        .config("spark.redis.host", "127.0.0.1")\
-        .config("spark.redis.port", "6379")\
+        .config("spark.redis.host", RHOST)\
+        .config("spark.redis.port", RPORT)\
         .getOrCreate()
     spark.sparkContext.setLogLevel("ERROR")
     logger.info("Starting spark application")
@@ -56,12 +56,15 @@ def main():
     # create DataFrame contains data grouped by asset counts
     byasset = clicks.groupBy("asset").count()
     
+    # create a writer to save each data row to Redis
+    clickWriter = ClickWriter(RHOST, int(RPORT))
+    
     # start a Spark Structured Streaming query to update count result to Redis
     # using a custom ForEach writer or just print the result to console
     query = byasset\
             .writeStream\
             .outputMode("update")\
-            .format("console")\
+            .foreach(clickWriter)\
             .start()
     
     query.awaitTermination()
