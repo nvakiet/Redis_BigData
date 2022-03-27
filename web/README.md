@@ -4,13 +4,13 @@
 pip install virtualenv
 
 # Then we create our virtual environment
-virtualenv envname
+virtualenv redisbigdata
 
 ```
 
 --> Activate the virtual environment :
 ```bash
-envname\scripts\activate
+redisbigdata\scripts\activate
 
 ```
 
