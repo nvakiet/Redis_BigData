@@ -6,7 +6,7 @@
     * To run spark task in the background and write to log files
     spark-submit --jars lib/spark-redis.jar ClickAnalyzer.py > ./click_count.log 2>&1 &
     * To run spark task in the foreground and logs to the console
-    spark-submit --jars lib/spark-redis.jar ClickAnalyzer.py
+    spark-submit --jars lib/spark-redis.jar ClickAnalyzer.py 
 """
 
 # import modules

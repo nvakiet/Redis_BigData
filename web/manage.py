@@ -18,5 +18,7 @@ def main():
     execute_from_command_line(sys.argv)
 
 
+# spark-submit - -jars lib/spark-redis.jar web/manage.py runserver
+
 if __name__ == '__main__':
     main()
