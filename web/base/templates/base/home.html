@@ -12,22 +12,22 @@
         </div>
       </div>
       
-      <div class="roomList__content">
+      <div id="advertisement">
         <div class="activities-1">
-        <button type="button" onClick="onClick()">
-            <img src="{% static 'images/ad1.jpg' %}" width="400" height="500"/>
+        <button id="ad1" type="button">
+            <img src="{% static 'images/ad1.jpg' %}" width="500" height="400"/>
           </button>
         </div>
 
       <div class="activities-2">
-        <button type="button" onClick="onClick()">
-            <img src="{% static 'images/ad2.jpg' %}" width="400" height="400"/>
+        <button id="ad2" type="button">
+            <img src="{% static 'images/ad2.jpg' %}" width="500" height="400"/>
         </button>
       </div>
 
       <div class="activities-3">
-        <button type="button" onClick="onClick()">
-            <img src="{% static 'images/ad3.jpg' %}" width="400" height="400"/>
+        <button id="ad3" type="button">
+            <img src="{% static 'images/ad3.jpg' %}" width="500" height="400"/>
           </button>
       </div>
       </div>
@@ -38,12 +38,38 @@
 </main>
 
 <script>
-    let clicks = 0;
+    $(document).ready(function(){
+      $("#ad1").click(function(){
+        $.post("home",
+          {
+            ID: "1",
+            cost: "10",
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+          });
+      }); 
+    });
 
-    function onClick() {
-        clicks += 1.0;
-        document.getElementById("clicks").innerHTML = clicks
-    };
+    $(document).ready(function(){
+      $("#ad2").click(function(){
+        $.post("home",
+          {
+            ID: "2",
+            cost: "100",
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+          });
+      }); 
+    });
+
+    $(document).ready(function(){
+      $("#ad3").click(function(){
+        $.post("home",
+          {
+            ID: "3",
+            cost: "1000",
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+          });
+      }); 
+    });
 </script>
 
 {% endblock %}

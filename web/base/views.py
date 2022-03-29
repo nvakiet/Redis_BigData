@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -65,6 +65,11 @@ def registerPage(request):
 
 
 def home(request):
+    if request.method == 'POST':
+        IDAdvertisement = request.POST.get('ID')
+        costAdvertisement = int(request.POST.get('cost'))
+        return JsonResponse({"ID": IDAdvertisement, "cost": costAdvertisement})
+    
     q = request.GET.get('q') if request.GET.get('q') != None else ''
 
     rooms = Room.objects.filter(
