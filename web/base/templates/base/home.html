@@ -38,10 +38,33 @@
 </main>
 
 <script>
+    function fetchingData() {
+      $.post("home", {
+            ID: "1",
+            cost: "10",
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        });
+
+      $.post("home", {
+            ID: "2",
+            cost: "100",
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        });
+
+      $.post("home", {
+            ID: "3",
+            cost: "1000",
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+          });
+    }
+
+    $(document).ready(function(){
+      setInterval(fetchingData,1000);
+    });
+
     $(document).ready(function(){
       $("#ad1").click(function(){
-        $.post("home",
-          {
+        $.post("home", {
             ID: "1",
             cost: "10",
             'csrfmiddlewaretoken': '{{ csrf_token }}'
@@ -51,8 +74,7 @@
 
     $(document).ready(function(){
       $("#ad2").click(function(){
-        $.post("home",
-          {
+        $.post("home", {
             ID: "2",
             cost: "100",
             'csrfmiddlewaretoken': '{{ csrf_token }}'
@@ -62,8 +84,7 @@
 
     $(document).ready(function(){
       $("#ad3").click(function(){
-        $.post("home",
-          {
+        $.post("home", {
             ID: "3",
             cost: "1000",
             'csrfmiddlewaretoken': '{{ csrf_token }}'
