@@ -1,4 +1,5 @@
 /.vscode
+*.pyc
 web/base/__pycache__/
 web/base/api/__pycache__/
 web/base/migrations/__pycache__/
