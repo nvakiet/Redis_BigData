@@ -1,12 +1,19 @@
 from django.apps import AppConfig
+from pyspark.sql import SparkSession
 from redis import Redis
 
 class BaseConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'base'
     
-    # def ready(self):
-    #     self.redisClient = Redis(self.host, self.port)
-    #     self.redisClient.xadd("clicks", [{"asset": "Ad1"}, {
-    #                           "cost": 29}], max_length=1000000)
-# Code connecting Redis & Spark
+    def __init__(self, app_name, app_module):
+        super().__init__(app_name, app_module)
+        self.spark = None
+        self.rd = None
+    
+    def ready(self):
+        self.spark = SparkSession.builder.master("local[*]")\
+            .config("spark.jars", "lib/spark-redis.jar")\
+            .getOrCreate()
+        self.rd = Redis("127.0.0.1", "6379")
+        print(self.spark.sparkContext.getConf().getAll())

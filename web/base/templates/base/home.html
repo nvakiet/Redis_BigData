@@ -8,7 +8,7 @@
                     id="ad1" data-cost="10" onclick="sendAdClick(this)">
             </div>
             <div class="col-sm-6">
-                <p id="str1"></p>
+                <p id="ad1-count"></p>
             </div>
         </div>
         <div class="row">
@@ -17,7 +17,7 @@
                     id="ad2" data-cost="20" onclick="sendAdClick(this)">
             </div>
             <div class="col-sm-6">
-                <p id="str2">Test paragraph</p>
+                <p id="ad2-count">Test paragraph</p>
             </div>
         </div>
         <div class="row">
@@ -26,7 +26,7 @@
                     id="ad3" data-cost="30" onclick="sendAdClick(this)">
             </div>
             <div class="col-sm-6">
-                <p id="str3">Test paragraph</p>
+                <p id="ad3-count">Test paragraph</p>
             </div>
         </div>
     </div>
@@ -51,6 +51,15 @@
             //'csrfmiddlewaretoken': '{{ csrf_token }}'
         })
         //$.post("home", ad)
+    }
+
+    function requestCount() {
+        $.get("home/getCounts", function(data, status) {
+            // Handle status code first
+            $.each(data.df, function(i, row) {
+                document.getElementById(row.asset + "-count").innerHTML = row.count;
+            })
+        })
     }
 
     {% comment %} $(document).ready(function() {

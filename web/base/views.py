@@ -4,8 +4,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
+
+from .apps import BaseConfig
 from .models import Room, Topic, Message, User
 from .forms import RoomForm, UserForm, MyUserCreationForm
+from django.apps import apps 
 
 # Create your views here.
 
@@ -216,12 +219,13 @@ def recordClick(request):
         IDAdvertisement = request.POST.get('adId')
         costAdvertisement = request.POST.get('adCost')
         print(IDAdvertisement, costAdvertisement)
+        app_config = apps.get_app_config(BaseConfig.name)
         # Redis
         # Run a redis streaming query
-        # try:
-        #     redisClient.xadd("clicks", {"asset": IDAdvertisement, "cost": int(costAdvertisement)}, maxlen=1000000)
-        response = JsonResponse({"status": "Success"})
-        # except Exception as e:
-        #     response = JsonResponse({"status": "Failed"})    
+        try:
+            app_config.rd.xadd("clicks", {"asset": IDAdvertisement, "cost": int(costAdvertisement)}, maxlen=1000000)
+            response = JsonResponse({"status": "Success"})
+        except Exception as e:
+            response = JsonResponse({"status": "Failed"})    
         print(response.content)
         return response
