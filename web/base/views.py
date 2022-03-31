@@ -6,16 +6,82 @@ from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from .models import Room, Topic, Message, User
 from .forms import RoomForm, UserForm, MyUserCreationForm
+import sqlite3
+from pathlib import Path
 
 # Create your views here.
-
+BASE_DIR = Path(__file__).resolve().parent.parent
 # rooms = [
 #     {'id': 1, 'name': 'Lets learn python!'},
 #     {'id': 2, 'name': 'Design with me'},
 #     {'id': 3, 'name': 'Frontend developers'},
 # ]
 
+def readAdvertisement(idAdvertisement):
+    try:
+        sqliteConnection = sqlite3.connect(BASE_DIR / "db.sqlite3")
+        cursor = sqliteConnection.cursor()
 
+        sqlite_select_query = f"""SELECT * from advertisement where id={idAdvertisement}"""
+        cursor.execute(sqlite_select_query)
+        records = cursor.fetchall()
+        cursor.close()
+        
+        #print("Read successfully ! ")
+        return records
+        
+    except sqlite3.Error as error:
+        print("Failed to read data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+
+def updateAdvertisement(id, clicks, cost):
+    try:
+        sqliteConnection = sqlite3.connect(BASE_DIR / "db.sqlite3")
+        cursor = sqliteConnection.cursor()
+
+        sqlite_update_query = f"""UPDATE advertisement SET numberOfClicks = {clicks}, cost = {cost} WHERE id = {id}"""
+        cursor.execute(sqlite_update_query)
+        sqliteConnection.commit()
+        #print("Updated successfully ")
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to update sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            
+def home(request):
+    if request.method == 'POST':
+        # print(request.POST)
+        IDAdvertisement = request.POST.get('ID')
+        costAdvertisement = int(request.POST.get('cost'))
+        records = readAdvertisement(IDAdvertisement)
+
+        clicks = records[0][1] + 1
+        cost = records[0][2] + costAdvertisement
+        updateAdvertisement(IDAdvertisement, clicks, cost)
+        
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+
+    rooms = Room.objects.filter(
+        Q(topic__name__icontains=q) |
+        Q(name__icontains=q) |
+        Q(description__icontains=q)
+    )
+
+    topics = Topic.objects.all()[0:5]
+    room_count = rooms.count()
+    room_messages = Message.objects.filter(
+        Q(room__topic__name__icontains=q))[0:3]
+
+    context = {'rooms': rooms, 'topics': topics,
+               'room_count': room_count, 'room_messages': room_messages}
+    return render(request, 'base/home.html', context)
+
+#--------------------------------------------------------------------------------------------------------------------------
 def loginPage(request):
     page = 'login'
     if request.user.is_authenticated:
@@ -62,32 +128,6 @@ def registerPage(request):
             messages.error(request, 'An error occurred during registration')
 
     return render(request, 'base/login_register.html', {'form': form})
-
-
-def home(request):
-    if request.method == 'POST':
-        # print(request.POST)
-        IDAdvertisement = request.POST.get('ID')
-        costAdvertisement = int(request.POST.get('cost'))
-        return JsonResponse({"ID": IDAdvertisement, "cost": costAdvertisement})
-    
-    q = request.GET.get('q') if request.GET.get('q') != None else ''
-
-    rooms = Room.objects.filter(
-        Q(topic__name__icontains=q) |
-        Q(name__icontains=q) |
-        Q(description__icontains=q)
-    )
-
-    topics = Topic.objects.all()[0:5]
-    room_count = rooms.count()
-    room_messages = Message.objects.filter(
-        Q(room__topic__name__icontains=q))[0:3]
-
-    context = {'rooms': rooms, 'topics': topics,
-               'room_count': room_count, 'room_messages': room_messages}
-    return render(request, 'base/home.html', context)
-
 
 def room(request, pk):
     room = Room.objects.get(id=pk)

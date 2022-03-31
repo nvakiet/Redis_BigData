@@ -41,27 +41,25 @@
     function fetchingData() {
       $.post("home", {
             ID: "1",
-            cost: "10",
+            cost: "20",
             'csrfmiddlewaretoken': '{{ csrf_token }}'
         });
 
       $.post("home", {
             ID: "2",
-            cost: "100",
+            cost: "15",
             'csrfmiddlewaretoken': '{{ csrf_token }}'
         });
 
       $.post("home", {
             ID: "3",
-            cost: "1000",
+            cost: "10",
             'csrfmiddlewaretoken': '{{ csrf_token }}'
           });
     }
 
-    $(document).ready(function(){
-      setInterval(fetchingData,1000);
-    });
-
+    setInterval(fetchingData, 10000);
+    
     $(document).ready(function(){
       $("#ad1").click(function(){
         $.post("home", {
