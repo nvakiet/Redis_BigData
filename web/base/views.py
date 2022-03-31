@@ -64,11 +64,14 @@ def registerPage(request):
     return render(request, 'base/login_register.html', {'form': form})
 
 def home(request):
-    if request.method == 'PUT':
-        IDAdvertisement = request.POST.get('adId')
-        costAdvertisement = request.POST.get('adCost')
-        print(IDAdvertisement, costAdvertisement)
-        return JsonResponse({"adId": IDAdvertisement, "adCost": costAdvertisement})
+    # if request.method == 'POST':
+    #     IDAdvertisement = request.POST.get('adId')
+    #     costAdvertisement = request.POST.get('adCost')
+    #     print(IDAdvertisement, costAdvertisement)
+    #     # Redis
+    #     response = JsonResponse({"status": "Success"})
+    #     print(response.content)
+    #     return response
     
     q = request.GET.get('q') if request.GET.get('q') != None else ''
 
@@ -207,3 +210,18 @@ def topicsPage(request):
 def activityPage(request):
     room_messages = Message.objects.all()
     return render(request, 'base/activity.html', {'room_messages': room_messages})
+
+def recordClick(request):
+    if request.method == 'POST':
+        IDAdvertisement = request.POST.get('adId')
+        costAdvertisement = request.POST.get('adCost')
+        print(IDAdvertisement, costAdvertisement)
+        # Redis
+        # Run a redis streaming query
+        # try:
+        #     redisClient.xadd("clicks", {"asset": IDAdvertisement, "cost": int(costAdvertisement)}, maxlen=1000000)
+        response = JsonResponse({"status": "Success"})
+        # except Exception as e:
+        #     response = JsonResponse({"status": "Failed"})    
+        print(response.content)
+        return response

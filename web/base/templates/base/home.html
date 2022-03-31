@@ -8,7 +8,7 @@
                     id="ad1" data-cost="10" onclick="sendAdClick(this)">
             </div>
             <div class="col-sm-6">
-                <p>Test paragraph</p>
+                <p id="str1"></p>
             </div>
         </div>
         <div class="row">
@@ -17,7 +17,7 @@
                     id="ad2" data-cost="20" onclick="sendAdClick(this)">
             </div>
             <div class="col-sm-6">
-                <p>Test paragraph</p>
+                <p id="str2">Test paragraph</p>
             </div>
         </div>
         <div class="row">
@@ -26,26 +26,31 @@
                     id="ad3" data-cost="30" onclick="sendAdClick(this)">
             </div>
             <div class="col-sm-6">
-                <p>Test paragraph</p>
+                <p id="str3">Test paragraph</p>
             </div>
         </div>
     </div>
 </main>
 
 <script>
+    //let csrftoken = $("[name=csrfmiddlewaretoken]").val();
+
     function sendAdClick(elem) {
         var ad = new Object();
         ad.adId = elem.getAttribute("id");
         ad.adCost = parseInt(elem.getAttribute("data-cost"));
         ad.csrfmiddlewaretoken = '{{ csrf_token }}';
         $.ajax({
-            "url": 'home',
-            "type": 'PUT',
+            "url": '/home/recordClick',
+            "type": 'POST',
             "data": ad,
             "success": function(data) {
-                alert('Put was performed.');
+                alert(data.status)
+                //document.getElementById("str1").innerHTML = data.status;
             }
+            //'csrfmiddlewaretoken': '{{ csrf_token }}'
         })
+        //$.post("home", ad)
     }
 
     {% comment %} $(document).ready(function() {
