@@ -34,6 +34,7 @@
 
 <script>
     //let csrftoken = $("[name=csrfmiddlewaretoken]").val();
+    setInterval(requestCount, 2000);
 
     function sendAdClick(elem) {
         var ad = new Object();
@@ -44,10 +45,10 @@
             "url": '/home/recordClick',
             "type": 'POST',
             "data": ad,
-            "success": function(data) {
+            {% comment %} "success": function(data) {
                 alert(data.status)
                 //document.getElementById("str1").innerHTML = data.status;
-            }
+            } {% endcomment %}
             //'csrfmiddlewaretoken': '{{ csrf_token }}'
         })
         //$.post("home", ad)
@@ -55,11 +56,14 @@
 
     function requestCount() {
         $.get("home/getCounts", function(data, status) {
-            // Handle status code first
-            $.each(data.df, function(i, row) {
-                document.getElementById(row.asset + "-count").innerHTML = row.count;
-            })
-        })
+            if (status == "success") {
+                $.each(data.df, function(i, row) {
+                    document.getElementById(row.asset + "-count").innerHTML = row.count;
+                });
+            } else {
+                console.log("GET request failed with status: " + status);
+            }
+        });
     }
 
     {% comment %} $(document).ready(function() {

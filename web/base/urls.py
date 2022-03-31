@@ -13,5 +13,6 @@ urlpatterns = [
     path('topics/', views.topicsPage, name="topics"),
     path('activity/', views.activityPage, name="activity"),
     
-    path("home/recordClick", views.recordClick, name="recordClick")
+    path("home/recordClick", views.recordClick, name="recordClick"),
+    path("home/getCounts", views.getCounts, name="getCounts")
 ]

@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
@@ -218,7 +219,7 @@ def recordClick(request):
     if request.method == 'POST':
         IDAdvertisement = request.POST.get('adId')
         costAdvertisement = request.POST.get('adCost')
-        print(IDAdvertisement, costAdvertisement)
+        
         app_config = apps.get_app_config(BaseConfig.name)
         # Redis
         # Run a redis streaming query
@@ -227,5 +228,18 @@ def recordClick(request):
             response = JsonResponse({"status": "Success"})
         except Exception as e:
             response = JsonResponse({"status": "Failed"})    
+        return response
+    
+def getCounts(request):
+    if request.method == "GET":
+        app_config = apps.get_app_config(BaseConfig.name)
+        # df = app_config.spark\
+        #     .read.format("org.apache.spark.sql.redis")\
+        #     .schema("asset STRING, count INT")\
+        #     .option("table", "click")\
+        #     .load()
+        df = app_config.spark.sql("select * from clicks")
+        results = df.toJSON().map(lambda j: json.loads(j)).collect()
+        response = JsonResponse({"df": results})
         print(response.content)
         return response

@@ -33,7 +33,7 @@ def main():
 
         # Create a table view of Redis data, only need to call once when program starts
         df = spark.read.format("org.apache.spark.sql.redis").schema("asset STRING, count INT").option("table", "click").load()
-
+        
         # should use an event scheduler library to run the content of the loop every second instead of this
         s = sched.scheduler(time.time, time.sleep)
         s.enter(1, 1, doQuery, (df,s))

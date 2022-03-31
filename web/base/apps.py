@@ -16,4 +16,6 @@ class BaseConfig(AppConfig):
             .config("spark.jars", "lib/spark-redis.jar")\
             .getOrCreate()
         self.rd = Redis("127.0.0.1", "6379")
-        print(self.spark.sparkContext.getConf().getAll())
+        
+        self.spark.sparkContext.setLogLevel("WARN")
+        self.spark.sql("CREATE TABLE IF NOT EXISTS clicks(asset STRING, count INT) USING org.apache.spark.sql.redis OPTIONS (table 'click')")
