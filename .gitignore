@@ -4,3 +4,4 @@ web/base/__pycache__/
 web/base/api/__pycache__/
 web/base/migrations/__pycache__/
 web/base/studybuds/__pycache__/
+*.pyc
