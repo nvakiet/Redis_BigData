@@ -14,22 +14,26 @@
       
       <div id="advertisement">
         <div class="activities-1">
-        <button id="ad1" type="button">
-            <img src="{% static 'images/ad1.jpg' %}" width="500" height="400"/>
+          <button id="ad1" type="button" onClick="onClick1()">
+              <img src="{% static 'images/ad1.jpg' %}" width="500" height="400"/>
           </button>
+          <p id="clicks1"></>
         </div>
 
       <div class="activities-2">
-        <button id="ad2" type="button">
+        <button id="ad2" type="button" onClick="onClick2()">
             <img src="{% static 'images/ad2.jpg' %}" width="500" height="400"/>
         </button>
+        <p id="clicks2"></p>
       </div>
 
       <div class="activities-3">
-        <button id="ad3" type="button">
+        <button id="ad3" type="button" onClick="onClick3()">
             <img src="{% static 'images/ad3.jpg' %}" width="500" height="400"/>
           </button>
+          <p id="clicks3"></p>
       </div>
+      
       </div>
       
     </div>
@@ -38,31 +42,10 @@
 </main>
 
 <script>
-    function fetchingData() {
-      $.post("home", {
-            ID: "1",
-            cost: "20",
-            'csrfmiddlewaretoken': '{{ csrf_token }}'
-        });
-
-      $.post("home", {
-            ID: "2",
-            cost: "15",
-            'csrfmiddlewaretoken': '{{ csrf_token }}'
-        });
-
-      $.post("home", {
-            ID: "3",
-            cost: "10",
-            'csrfmiddlewaretoken': '{{ csrf_token }}'
-          });
-    }
-
-    setInterval(fetchingData, 10000);
-    
-    $(document).ready(function(){
+  $(document).ready(function(){
       $("#ad1").click(function(){
         $.post("home", {
+            signal: "click",
             ID: "1",
             cost: "10",
             'csrfmiddlewaretoken': '{{ csrf_token }}'
@@ -73,6 +56,7 @@
     $(document).ready(function(){
       $("#ad2").click(function(){
         $.post("home", {
+            signal: "click",
             ID: "2",
             cost: "100",
             'csrfmiddlewaretoken': '{{ csrf_token }}'
@@ -83,12 +67,61 @@
     $(document).ready(function(){
       $("#ad3").click(function(){
         $.post("home", {
+            signal: "click",
             ID: "3",
             cost: "1000",
             'csrfmiddlewaretoken': '{{ csrf_token }}'
           });
       }); 
     });
+
+    function automaticClickData() {
+      $.post("home", {
+            signal: "click",
+            ID: "1",
+            cost: "20",
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        });
+
+      $.post("home", {
+            signal: "click",
+            ID: "2",
+            cost: "15",
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        });
+
+      $.post("home", {
+            signal: "click",
+            ID: "3",
+            cost: "10",
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+          });
+    }
+
+    // setInterval(automaticClickData, 10000);
+
+    let clicks1 = 0;
+    let clicks2 = 0;
+    let clicks3 = 0;
+
+    function onClick1() {
+        clicks1 += 1.0;
+        document.getElementById("clicks1").innerHTML = clicks1
+    };
+
+    function onClick2() {
+        clicks2 += 1.0;
+        document.getElementById("clicks2").innerHTML = clicks2
+    };
+
+    function onClick3() {
+        clicks3 += 1.0;
+        document.getElementById("clicks3").innerHTML = clicks3
+    };
+
+    onClick1();
+    onClick2();
+    onClick3();
 </script>
 
 {% endblock %}

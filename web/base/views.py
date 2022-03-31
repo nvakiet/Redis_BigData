@@ -36,6 +36,25 @@ def readAdvertisement(idAdvertisement):
         if sqliteConnection:
             sqliteConnection.close()
 
+def readNumberOfClicks():
+    try:
+        sqliteConnection = sqlite3.connect(BASE_DIR / "db.sqlite3")
+        cursor = sqliteConnection.cursor()
+
+        sqlite_select_query = f"""SELECT numberOfClicks from advertisement"""
+        cursor.execute(sqlite_select_query)
+        records = cursor.fetchall()
+        cursor.close()
+        
+        #print("Read successfully ! ")
+        return records
+        
+    except sqlite3.Error as error:
+        print("Failed to read data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            
 def updateAdvertisement(id, clicks, cost):
     try:
         sqliteConnection = sqlite3.connect(BASE_DIR / "db.sqlite3")
@@ -55,14 +74,21 @@ def updateAdvertisement(id, clicks, cost):
             
 def home(request):
     if request.method == 'POST':
+        signal = request.POST.get('signal')
         # print(request.POST)
-        IDAdvertisement = request.POST.get('ID')
-        costAdvertisement = int(request.POST.get('cost'))
-        records = readAdvertisement(IDAdvertisement)
+        if (signal == 'click'):
+            IDAdvertisement = request.POST.get('ID')
+            costAdvertisement = int(request.POST.get('cost'))
+            records = readAdvertisement(IDAdvertisement)
 
-        clicks = records[0][1] + 1
-        cost = records[0][2] + costAdvertisement
-        updateAdvertisement(IDAdvertisement, clicks, cost)
+            clicks = records[0][1] + 1
+            cost = records[0][2] + costAdvertisement
+            updateAdvertisement(IDAdvertisement, clicks, cost)
+        else:
+            records = readNumberOfClicks()
+            context = {"ad1": records[0][0], "ad2": records[1][0], "ad3": records[2][0]}
+            return render(request, 'base/home.html', context)
+            
         
     q = request.GET.get('q') if request.GET.get('q') != None else ''
 
