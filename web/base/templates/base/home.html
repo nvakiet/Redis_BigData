@@ -1,75 +1,82 @@
-{% extends 'main.html' %}
-{% load static %}
-{% block content %}
+{% extends 'main.html' %} {% load static %} {% block content %}
 
 <main class="layout layout">
-  <div class="container">
-    <!-- Room List Start -->
-    <div class="roomList">
-      <div class="roomList__header">
-        <div>
-          <h2>Advertisements</h2>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 img-circle">
+                <img src="{% static 'images/ad1.jpg' %}" style="width: 300px; height:auto"
+                    id="ad1" data-cost="10" onclick="sendAdClick(this)">
+            </div>
+            <div class="col-sm-6">
+                <p>Test paragraph</p>
+            </div>
         </div>
-      </div>
-      
-      <div id="advertisement">
-        <div class="activities-1">
-        <button id="ad1" type="button">
-            <img src="{% static 'images/ad1.jpg' %}" width="500" height="400"/>
-          </button>
+        <div class="row">
+            <div class="col-sm-6 img-circle">
+                <img src="{% static 'images/ad2.jpg' %}" style="width: 300px; height:auto"
+                    id="ad2" data-cost="20" onclick="sendAdClick(this)">
+            </div>
+            <div class="col-sm-6">
+                <p>Test paragraph</p>
+            </div>
         </div>
-
-      <div class="activities-2">
-        <button id="ad2" type="button">
-            <img src="{% static 'images/ad2.jpg' %}" width="500" height="400"/>
-        </button>
-      </div>
-
-      <div class="activities-3">
-        <button id="ad3" type="button">
-            <img src="{% static 'images/ad3.jpg' %}" width="500" height="400"/>
-          </button>
-      </div>
-      </div>
-      
+        <div class="row">
+            <div class="col-sm-6 img-circle">
+                <img src="{% static 'images/ad3.jpg' %}" style="width: 300px; height:auto"
+                    id="ad3" data-cost="30" onclick="sendAdClick(this)">
+            </div>
+            <div class="col-sm-6">
+                <p>Test paragraph</p>
+            </div>
+        </div>
     </div>
-    <!-- Room List End -->
-  </div>
 </main>
 
 <script>
-    $(document).ready(function(){
-      $("#ad1").click(function(){
-        $.post("home",
-          {
-            ID: "1",
-            cost: "10",
-            'csrfmiddlewaretoken': '{{ csrf_token }}'
-          });
-      }); 
+    function sendAdClick(elem) {
+        var ad = new Object();
+        ad.adId = elem.getAttribute("id");
+        ad.adCost = parseInt(elem.getAttribute("data-cost"));
+        ad.csrfmiddlewaretoken = '{{ csrf_token }}';
+        $.ajax({
+            "url": 'home',
+            "type": 'PUT',
+            "data": ad,
+            "success": function(data) {
+                alert('Put was performed.');
+            }
+        })
+    }
+
+    {% comment %} $(document).ready(function() {
+        $("#ad1").click(function() {
+            $.post("home", {
+                ID: "1",
+                cost: "10",
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            });
+        });
     });
 
-    $(document).ready(function(){
-      $("#ad2").click(function(){
-        $.post("home",
-          {
-            ID: "2",
-            cost: "100",
-            'csrfmiddlewaretoken': '{{ csrf_token }}'
-          });
-      }); 
+    $(document).ready(function() {
+        $("#ad2").click(function() {
+            $.post("home", {
+                ID: "2",
+                cost: "100",
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            });
+        });
     });
 
-    $(document).ready(function(){
-      $("#ad3").click(function(){
-        $.post("home",
-          {
-            ID: "3",
-            cost: "1000",
-            'csrfmiddlewaretoken': '{{ csrf_token }}'
-          });
-      }); 
-    });
+    $(document).ready(function() {
+        $("#ad3").click(function() {
+            $.post("home", {
+                ID: "3",
+                cost: "1000",
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            });
+        });
+    }); {% endcomment %}
 </script>
 
 {% endblock %}

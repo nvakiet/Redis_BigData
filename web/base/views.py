@@ -63,12 +63,12 @@ def registerPage(request):
 
     return render(request, 'base/login_register.html', {'form': form})
 
-
 def home(request):
-    if request.method == 'POST':
-        IDAdvertisement = request.POST.get('ID')
-        costAdvertisement = int(request.POST.get('cost'))
-        return JsonResponse({"ID": IDAdvertisement, "cost": costAdvertisement})
+    if request.method == 'PUT':
+        IDAdvertisement = request.POST.get('adId')
+        costAdvertisement = request.POST.get('adCost')
+        print(IDAdvertisement, costAdvertisement)
+        return JsonResponse({"adId": IDAdvertisement, "adCost": costAdvertisement})
     
     q = request.GET.get('q') if request.GET.get('q') != None else ''
 
