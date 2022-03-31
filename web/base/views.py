@@ -66,7 +66,6 @@ def registerPage(request):
 
 def home(request):
     if request.method == 'POST':
-        # print(request.POST)
         IDAdvertisement = request.POST.get('ID')
         costAdvertisement = int(request.POST.get('cost'))
         return JsonResponse({"ID": IDAdvertisement, "cost": costAdvertisement})
