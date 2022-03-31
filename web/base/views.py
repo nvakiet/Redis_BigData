@@ -155,6 +155,31 @@ def registerPage(request):
 
     return render(request, 'base/login_register.html', {'form': form})
 
+
+def home(request):
+    if request.method == 'POST':
+        IDAdvertisement = request.POST.get('ID')
+        costAdvertisement = int(request.POST.get('cost'))
+        return JsonResponse({"ID": IDAdvertisement, "cost": costAdvertisement})
+    
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+
+    rooms = Room.objects.filter(
+        Q(topic__name__icontains=q) |
+        Q(name__icontains=q) |
+        Q(description__icontains=q)
+    )
+
+    topics = Topic.objects.all()[0:5]
+    room_count = rooms.count()
+    room_messages = Message.objects.filter(
+        Q(room__topic__name__icontains=q))[0:3]
+
+    context = {'rooms': rooms, 'topics': topics,
+               'room_count': room_count, 'room_messages': room_messages}
+    return render(request, 'base/home.html', context)
+
+
 def room(request, pk):
     room = Room.objects.get(id=pk)
     room_messages = room.message_set.all()
