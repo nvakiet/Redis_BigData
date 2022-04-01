@@ -14,7 +14,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.types import *
 from pyspark.sql.functions import *
 import sys,logging
-from datetime import datetime
+#from datetime import datetime
 from ClickWriter import ClickWriter
 
 # Logging configuration
@@ -27,7 +27,7 @@ logger.setLevel(logging.INFO)
 logger.addHandler(handler)
 
 # current time variable to be used for logging purpose
-dt_string = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+#dt_string = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 # set the app name
 APPNAME = "ClickAnalyzer"
 # redis instance address
@@ -37,16 +37,19 @@ RPORT = "6379"
 def main():
     # init spark session
     spark = SparkSession.builder\
-        .appName(APPNAME + "_" + str(dt_string))\
+        .appName(APPNAME)\
         .master("local[*]")\
         .config("spark.redis.host", RHOST)\
         .config("spark.redis.port", RPORT)\
+        .config("spark.sql.shuffle.partitions", 1)\
         .getOrCreate()
     spark.sparkContext.setLogLevel("ERROR")
     logger.info("Starting spark application")
 
     # setup stream schema
-    clicks = spark.readStream.format("redis").option("stream.keys", "clicks")\
+    clicks = spark.readStream.format("redis")\
+        .option("stream.keys", "clicks")\
+        .option("stream.parallelism", 1)\
         .schema(StructType([
             StructField("asset", StringType()),
             StructField("cost", LongType())

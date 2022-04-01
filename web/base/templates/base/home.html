@@ -8,7 +8,7 @@
                     id="ad1" data-cost="10" onclick="sendAdClick(this)">
             </div>
             <div class="col-sm-6">
-                <p id="ad1-count"></p>
+                <p id="ad1-count">0</p>
             </div>
         </div>
         <div class="row">
@@ -17,7 +17,7 @@
                     id="ad2" data-cost="20" onclick="sendAdClick(this)">
             </div>
             <div class="col-sm-6">
-                <p id="ad2-count">Test paragraph</p>
+                <p id="ad2-count">0</p>
             </div>
         </div>
         <div class="row">
@@ -26,15 +26,14 @@
                     id="ad3" data-cost="30" onclick="sendAdClick(this)">
             </div>
             <div class="col-sm-6">
-                <p id="ad3-count">Test paragraph</p>
+                <p id="ad3-count">0</p>
             </div>
         </div>
     </div>
 </main>
 
 <script>
-    //let csrftoken = $("[name=csrfmiddlewaretoken]").val();
-    setInterval(requestCount, 2000);
+    setInterval(requestCount, 1000);
 
     function sendAdClick(elem) {
         var ad = new Object();
@@ -65,36 +64,6 @@
             }
         });
     }
-
-    {% comment %} $(document).ready(function() {
-        $("#ad1").click(function() {
-            $.post("home", {
-                ID: "1",
-                cost: "10",
-                'csrfmiddlewaretoken': '{{ csrf_token }}'
-            });
-        });
-    });
-
-    $(document).ready(function() {
-        $("#ad2").click(function() {
-            $.post("home", {
-                ID: "2",
-                cost: "100",
-                'csrfmiddlewaretoken': '{{ csrf_token }}'
-            });
-        });
-    });
-
-    $(document).ready(function() {
-        $("#ad3").click(function() {
-            $.post("home", {
-                ID: "3",
-                cost: "1000",
-                'csrfmiddlewaretoken': '{{ csrf_token }}'
-            });
-        });
-    }); {% endcomment %}
 </script>
 
 {% endblock %}
