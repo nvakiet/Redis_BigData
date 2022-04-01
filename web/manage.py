@@ -18,7 +18,5 @@ def main():
     execute_from_command_line(sys.argv)
 
 
-# python web/manage.py runserver
-
 if __name__ == '__main__':
     main()
