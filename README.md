@@ -1,6 +1,5 @@
-# Redis - Big Data
-Ho Chi Minh University of Science - Computer Science - K19 - Introduction to Big Data   
-Project: Research about Redis and make a program to demonstrate a use-case of Redis  
+##### Ho Chi Minh University of Science - Computer Science - K19 - Introduction to Big Data   
+##### Project: Research about Redis and make a program to demonstrate a use-case of Redis  
 Group name: KKAP  
 Members:  
 - Ngô Văn Anh Kiệt
