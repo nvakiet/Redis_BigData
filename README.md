@@ -8,7 +8,8 @@ Members:
 - Phùng Anh Khoa
 - Ngô Huy Anh
 
-See our reports in "Research reports" folder.  
+See our reports in "Research reports" folder. Here's the link to our demo video:  
+https://www.youtube.com/watch?v=mTpan8M7YhI  
 
 To run the demo, use these commands in order (on Linux Ubuntu):  
 - Run ClickAnalyzer Spark job in the background:  
