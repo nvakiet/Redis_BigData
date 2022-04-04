@@ -1,3 +1,10 @@
+
+"""
+# Title : Web Click Processing Using Redis And Spark
+# Author : Ngo Van Anh Kiet
+# Date: 23/03/2022
+"""
+
 from redis import Redis
 
 # A custom ForeachWriter class to be used in spark-redis query
