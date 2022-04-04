@@ -17,5 +17,6 @@ To run the demo, use these commands in order (on Linux Ubuntu):
     spark-submit --jars lib/spark-redis.jar ClickAnalyzer.py  
 - Next, open a new terminal (if ClickAnalyzer is not in the background) then run Django web server:
     python web/manage.py runserver  
+
 Then go to the webpage at hosted localhost, click on the pictures to send click counts.  
 Make sure you have installed Apache Spark, Redis server and all the python packages in requirements.txt
